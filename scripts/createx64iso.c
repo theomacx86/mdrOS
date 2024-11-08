@@ -49,7 +49,7 @@ bool install_mbr(FILE * iso)
     MBR_s mbr_s = {0};
     uint32_t filesize = 0;
     fseek(iso, 0, 0);
-    mbr = fopen("../build/bin/stage1.bin", "r");
+    mbr = fopen("build/bin/stage1.bin", "r");
     if(!mbr)
     {
         return false;
@@ -63,15 +63,10 @@ bool install_mbr(FILE * iso)
         return -1;
     }
 
-    printf("MBR Code is %d bytes long", filesize);
+    printf("MBR Code is %d bytes long\n", filesize);
 
     fseek(mbr, 0, 0);
     fread(&(mbr_s.MBR_Bootstrap) , filesize, 1, mbr);
-
-    for(int i = 0; i < filesize; ++i)
-    {
-        printf("%d ", mbr_s.MBR_Bootstrap[i]);
-    }
 
     fseek(iso, 0, 0);
     fwrite(&(mbr_s.MBR_Bootstrap), filesize, 1,iso);
@@ -115,6 +110,28 @@ void create_mbr(FILE * iso, uint32_t disk_size)
     return;
 }
 
+bool install_secondary_bootlooader(FILE * iso)
+{
+    FILE * payload;
+    uint32_t filesize = 0;
+    fseek(iso, 0, 0);
+    payload = fopen("build/bin/stage2_bootloader", "r");
+
+    char * payload_mem;
+    payload_mem = malloc(filesize);
+    fseek(payload, 0, SEEK_END);
+    filesize = ftell(payload);
+    fseek(payload, 0, 0);
+    fread(payload_mem, filesize, 1, payload);
+
+    
+    fseek(iso, 512, 0);
+    fwrite(payload_mem, filesize,1 , iso);
+    fclose(payload);
+    free(payload_mem);
+    return true;
+}
+
 void fill_image(FILE * iso, uint32_t filesize)
 {
     filesize = filesize - 512;      //LBA 0 is filled !!
@@ -136,7 +153,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    iso = fopen("../mdrOS.iso","w+");
+    iso = fopen("mdrOS.iso","w+");
     if(!iso)
     {
         puts("Error when opening file");
@@ -148,15 +165,25 @@ int main(int argc, char *argv[])
     disk_size = disk_size * 0x100000;               //byte size
     disk_size = disk_size - (disk_size % 512);      //Align
     create_mbr(iso, disk_size);
+    puts("Partition table created\n");
 
     if(!install_mbr(iso))
     {
         puts("Error while writing MBR");
         return -1;
     }
-
+    puts("Bootstrap code installed\n");
 
     fill_image(iso, disk_size);
+    printf("Disk image is now %d bytes large\n", disk_size);
+
+    if(!install_secondary_bootlooader(iso))
+    {
+        puts("Failed to install secondary bootloader, image might be corrupted !");
+        fclose(iso);
+        return -1;
+    }
+    puts("Installed secondary bootloader\n");
 
     fclose(iso);
 }
