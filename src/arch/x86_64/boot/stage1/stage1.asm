@@ -1,5 +1,12 @@
-; LolOS bootloader code
-; For MBR/Legacy devices
+;
+; mdrOS bootloader stage 1 code
+;
+
+; mdrOS uses a custom bootloader because why not ? This is stage one, located in the MBR
+; its job is to grab a memory map from the BIOS and switch to 64 bit flat
+; It will load the secondary bootloader, located in the 1-63th sector gap (alignement)
+; This one does the nasty stuff (loading the kernel, mapping it...)
+
 
 ORG 0x7c00
 BITS 16         ; Real mode, 16 bit
@@ -34,7 +41,7 @@ setup_registers:
     mov cr0, eax
     jmp CODE_SEG:load32
 
-; This 16 bit code will load the memory map into memory
+; This 16 bit code will load the memory map into memory at 0x8000
 mmap_lenght_ptr equ 0x8000
 mmap_ptr equ 0x8004        
 load_memory_map:
@@ -88,11 +95,11 @@ gdt_descriptor:
 
 [BITS 32]
 load32:
-    mov eax, 1
-    mov ecx, 100
-    mov edi, 0x0100000
+    mov eax, 1              ;Read from LBA 1
+    mov ecx, 100           ;To LBA 2047
+    mov edi, 0x0200000      ;Load at address 0x200000 (2Mb)
     call ata_lba_read
-    jmp CODE_SEG:0x0100000
+    jmp CODE_SEG:0x0200000
 
 ;   Params
 ;   EAX: LBA to read, ECX: number of sectors to read, EDI: destination

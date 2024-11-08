@@ -7,6 +7,7 @@
 
 execute_process(COMMAND uname OUTPUT_VARIABLE HOST_OS OUTPUT_STRIP_TRAILING_WHITESPACE)
 if(HOST_OS STREQUAL "Darwin")
+
     message(STATUS "Building on Darwin/macOS, using  clang/lld")
     find_program(LINKER_LLD ld.lld)
     find_program(CLANG clang)

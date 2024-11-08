@@ -43,13 +43,13 @@ CHS_s * LBA_to_CHS(uint32_t LBA, CHS_s * CHS)
     return CHS;
 }
 
-bool install_mbr(FILE * iso)
+bool install_mbr(FILE * iso, char * stage1path)
 {
     FILE * mbr;
     MBR_s mbr_s = {0};
     uint32_t filesize = 0;
     fseek(iso, 0, 0);
-    mbr = fopen("build/bin/stage1.bin", "r");
+    mbr = fopen(stage1path, "r");
     if(!mbr)
     {
         return false;
@@ -110,12 +110,12 @@ void create_mbr(FILE * iso, uint32_t disk_size)
     return;
 }
 
-bool install_secondary_bootlooader(FILE * iso)
+bool install_secondary_bootlooader(FILE * iso, char * stage2path)
 {
     FILE * payload;
     uint32_t filesize = 0;
     fseek(iso, 0, 0);
-    payload = fopen("build/bin/stage2_bootloader", "r");
+    payload = fopen(stage2path, "r");
 
     char * payload_mem;
     payload_mem = malloc(filesize);
@@ -147,9 +147,9 @@ int main(int argc, char *argv[])
 {
     FILE * iso = NULL;
     uint32_t disk_size = 0;
-    if(argc <= 1)
+    if(argc <= 3)
     {
-        puts("Provide a disk size in MB.");
+        puts("Usage: Disk size (Mb), stage1 bootloader path, stage2 bootloader path.");
         return -1;
     }
 
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     create_mbr(iso, disk_size);
     puts("Partition table created\n");
 
-    if(!install_mbr(iso))
+    if(!install_mbr(iso, argv[2]))
     {
         puts("Error while writing MBR");
         return -1;
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     fill_image(iso, disk_size);
     printf("Disk image is now %d bytes large\n", disk_size);
 
-    if(!install_secondary_bootlooader(iso))
+    if(!install_secondary_bootlooader(iso, argv[3]))
     {
         puts("Failed to install secondary bootloader, image might be corrupted !");
         fclose(iso);
