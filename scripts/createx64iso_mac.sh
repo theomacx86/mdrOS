@@ -7,3 +7,4 @@ clang scripts/createx64iso.c -o scripts/createx64iso
 DISK_IDENTIFIER=$(hdiutil attach -nomount mdrOS.iso | awk 'NR==1 {print $1}')
 mke2fs -t ext2 "${DISK_IDENTIFIER}s1"
 fdisk mdrOS.iso
+hdiutil detach $DISK_IDENTIFIER
