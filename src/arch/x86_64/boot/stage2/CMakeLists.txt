@@ -23,3 +23,4 @@ set(ASM_FILES ${BOOTLOADER_ASM})
 add_executable(stage2_bootloader ${SOURCE_FILE} ${ASM_FILES})
 
 target_include_directories(stage2_bootloader PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(stage2_bootloader PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

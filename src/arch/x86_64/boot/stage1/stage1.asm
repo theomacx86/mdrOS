@@ -95,10 +95,18 @@ gdt_descriptor:
 
 [BITS 32]
 load32:
-    mov eax, 1              ;Read from LBA 1
-    mov ecx, 100           ;To LBA 2047
-    mov edi, 0x0200000      ;Load at address 0x200000 (2Mb)
+    mov ecx, 1               ;i = 1
+    mov edi, 0x0200000      ;Load at address 0x200000 (2Mb) incremented
+.loop:
+    mov eax, ecx            ;Read from LBA i
+    push ecx
+    mov ecx, 255            ;Read 255 LBAs
     call ata_lba_read
+    pop ecx
+    add ecx, 255
+    cmp ecx, 2047
+    jle .loop
+ 
     jmp CODE_SEG:0x0200000
 
 ;   Params

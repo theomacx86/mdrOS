@@ -4,3 +4,4 @@ build/
 mdrOS.iso
 .DS_Store
 scripts/createx64iso
+compile_commands.json

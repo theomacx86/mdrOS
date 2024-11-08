@@ -43,7 +43,7 @@ init_pdpt:
     or eax, 0x3
     mov [pdpt_table], eax
 
-    mov ecx, 1          ;Loop counter we need two pages
+    mov ecx, 2          ;Loop counter we need two pages
     xor ebx, ebx        ;Address starts = 0
     mov edx, 0          ;Entry counter
 
@@ -67,7 +67,6 @@ enable_long:
     or eax, 1 << 31
     or eax, 1 << 16
     mov cr0, eax
-    jmp $
 
     lgdt [gdt64.pointer]            ;Load the GDT
     mov ax, gdt64.data
@@ -79,7 +78,6 @@ enable_long:
 
 [BITS 64]
 long_mode_start:
-    jmp $
     jmp bootloader_start
 
 section .bss
