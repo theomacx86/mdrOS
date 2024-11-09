@@ -1,4 +1,4 @@
-#ifndef EST2_H
+#ifndef EXT2_h
 #define EXT2_h
 
 #endif
