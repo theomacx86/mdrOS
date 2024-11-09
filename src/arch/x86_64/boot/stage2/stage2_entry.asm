@@ -78,6 +78,8 @@ enable_long:
 
 [BITS 64]
 long_mode_start:
+    xor rdi, rdi
+    mov rdi, 0x8000
     jmp bootloader_start
 
 section .bss

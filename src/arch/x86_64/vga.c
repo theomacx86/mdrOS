@@ -129,14 +129,14 @@ void vga_print(char * s)
 /*
     int as hexadecimal
 */
-void itoh(uint32_t i)
+void itoh(uint64_t i)
 {
     if(i == 0)
     {
         return;
     }
 
-    itoh( (uint32_t) (i/16) );
+    itoh( (uint64_t) (i/16) );
 
     if( i%16 >  9)
     {
@@ -166,14 +166,14 @@ void itoc(int i)
 /**
 Unsigned to char
  */
-void utoc(uint32_t i)
+void utoc(uint64_t i)
 {
     if(i == 0)
     {
         return;
     }
 
-    utoc( (uint32_t) (i/10) );
+    utoc( (uint64_t) (i/10) );
 
     vga_putc((char) ((i%10)+48));
 }
@@ -192,7 +192,7 @@ void vga_printf(char * s, ...)
                         ++s;
                         break;
                     case 'u' : //unsigned integer
-                        utoc((uint32_t) va_arg( list, uint32_t ));
+                        utoc((uint64_t) va_arg( list, uint64_t ));
                         s+=2;
                         break;  
                     case 'd' : //integer
@@ -211,7 +211,7 @@ void vga_printf(char * s, ...)
                         break;
                     case 'x' : //hex (unsigned)
                         {
-                            uint32_t value = (uint32_t) va_arg( list, uint32_t );
+                            uint64_t value = (uint64_t) va_arg( list, uint64_t );
                             if(value == 0)
                             {
                                 vga_putc('0');
@@ -227,8 +227,7 @@ void vga_printf(char * s, ...)
                         if(*(s+2) == 'x')
                         {
                             uint64_t value = (uint64_t) va_arg( list, uint64_t );
-                            itoh( (uint32_t) (value >> 32));
-                            itoh( (uint32_t) (value));
+                            itoh( (uint64_t) (value));
                         }
                         s+=3;
                 }
