@@ -121,6 +121,7 @@ bool install_secondary_bootlooader(FILE * iso, char * stage2path)
     payload_mem = malloc(filesize);
     fseek(payload, 0, SEEK_END);
     filesize = ftell(payload);
+    printf("Second stage bootloader is %d bytes large (%d bytes remaining)\n", filesize, (2047 * 512) - (filesize));
     fseek(payload, 0, 0);
     fread(payload_mem, filesize, 1, payload);
 
