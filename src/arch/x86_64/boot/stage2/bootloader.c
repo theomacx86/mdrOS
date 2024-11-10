@@ -1,11 +1,12 @@
 #include "bootloader.h"
 #include "serial.h"
 #include "disk.h"
+#include "ext2.h"
 #include <stdint.h>
 #include "arch/x86_64/E820.h"
 
-char sector[512];
-
+MBR_s mbr = {0};
+ext2_superblock_s superblock = {0};
 void bootloader_start(E820_map_s * memory_map)
 {
     serial_init();
@@ -22,12 +23,21 @@ void bootloader_start(E820_map_s * memory_map)
         serial_printf("[INFO] Memory entry type %x base %x to %x\n", (uint64_t) (memory_map->map[i].type),  memory_map->map[i].base,  memory_map->map[i].base + memory_map->map[i].len);
     }
 
-    ata_lba_read(0, 1 , (uint16_t *) &sector);
-    
-    for(int i = 0; i < 512; ++i)
+    //Reads the MBR
+    ata_lba_read(0, 1 , (uint16_t *) (&mbr));
+    if(mbr.signature == MBR_SIGNATURE)
     {
-        serial_printf("%x ", sector[i]);
+        serial_write_str("Found MBR signature.\n");
     }
+
+    ata_lba_read(mbr.partitions[0].start_LBA + (1024/512), 1, (uint16_t*) (&superblock));
+
+    if(superblock.ext2_signature == EXT2_SIGNATURE)
+    {
+        serial_write_str("Loaded superblock.\n");
+        serial_write_str("Found superblock signature.\n");
+    }
+    
     while(1);
     return;
 }
