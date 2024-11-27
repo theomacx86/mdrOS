@@ -24,13 +24,16 @@ void bootloader_start(E820_map_s * memory_map)
     }
 
     //Reads the MBR
-    ata_lba_read(0, 1 , (uint16_t *) (&mbr));
+    //ata_lba_read(0, 1 , (uint16_t *) (&mbr));
+    ata_read_bytes(0, sizeof(MBR_s), (char*) &mbr);
     if(mbr.signature == MBR_SIGNATURE)
     {
         serial_write_str("Found MBR signature.\n");
     }
 
-    ata_lba_read(mbr.partitions[0].start_LBA + (1024/512), 1, (uint16_t*) (&superblock));
+    //ata_lba_read(mbr.partitions[0].start_LBA + (1024/512), 1, (uint16_t*) (&superblock));
+
+    ata_read_bytes( (mbr.partitions[0].start_LBA * SECTOR_SIZE) + 1024, sizeof(ext2_superblock_s), (char *) &superblock);
 
     if(superblock.ext2_signature == EXT2_SIGNATURE)
     {
