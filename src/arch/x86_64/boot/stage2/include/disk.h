@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define SECTOR_SIZE             512
+
 #define LBA_PORT_0_7            0x1F3
 #define LBA_PORT_8_15           0x1F4
 #define LBA_PORT_16_23          0x1F5
@@ -38,5 +40,13 @@ typedef struct MBR
  */
 void ata_lba_read(uint32_t LBA, uint8_t count, uint16_t * buffer);
 
+/**
+ * @brief Read n bytes from offset (in bytes) to the buffer.
+ * 
+ * @param start Byte to start the read.
+ * @param count Byte count.
+ * @param buffer Pointer to destination buffer.
+ */
+void ata_read_bytes(uint32_t start, uint32_t n, char * buffer);
 
 #endif
