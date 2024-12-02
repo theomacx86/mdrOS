@@ -36,6 +36,7 @@ endif()
 #   macOS specific toolchain
 #
 include(include/Cmake/macos.cmake)
+include(include/Cmake/linux.cmake)
 
 #
 #   Two stage bootloader for x86_64
