@@ -1,3 +1,8 @@
+/*
+    e820 definition header file
+    Copyright Théo JEHL - 2024
+*/
+
 #ifndef E820_H
 #define E820_H
 
@@ -24,5 +29,7 @@ typedef struct E820_map
 #define E820_MEMORY_ACPI            3
 #define E820_MEMORY_NVS             4
 #define E820_MEMORY_UNUSABLE        5
+
+#define KMEM_MMIO                   6
 
 #endif

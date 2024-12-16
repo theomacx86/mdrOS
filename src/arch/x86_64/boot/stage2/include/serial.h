@@ -1,3 +1,8 @@
+/*
+mdrOS second stage bootloader serial header file
+Copyright 2024 Théo Jehl
+*/
+
 #ifndef SERIAL_H
 #define SERIAL_H
 

@@ -1,5 +1,5 @@
 /*
-lolOS VGA i386 source file
+mdrOS VGA i386 source file
 Copyright Théo JEHL - 2024
 */
 

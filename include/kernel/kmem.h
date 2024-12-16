@@ -1,6 +1,6 @@
 /*
-lolOS Kernel memory lib header file
-Copyright Théo JEHL - 2024
+    mdrOS Kernel memory lib header file
+    Copyright Théo JEHL - 2024
 */
 
 #ifndef KMEM_H

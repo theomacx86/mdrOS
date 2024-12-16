@@ -1,3 +1,8 @@
+/*
+mdrOS second stage bootloader ext2 header file
+Copyright 2024 Théo Jehl
+*/
+
 #ifndef EXT2_h
 #define EXT2_h
 

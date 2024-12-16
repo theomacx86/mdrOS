@@ -1,3 +1,8 @@
+/*
+mdrOS second stage bootloader disk header file
+Copyright 2024 Théo Jehl
+*/
+
 #ifndef DISK_H
 #define DISK_H
 

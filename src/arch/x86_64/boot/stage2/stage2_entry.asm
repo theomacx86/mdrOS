@@ -1,3 +1,6 @@
+;   mdrOS Stage 2 bootloader
+;   Copyright 2024 Théo Jehl
+
 [BITS 32]
 section .entry
 

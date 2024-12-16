@@ -1,5 +1,5 @@
 /*
-lolOS VGA header file
+mdrOS VGA header file
 Copyright Théo JEHL - 2024
 */
 

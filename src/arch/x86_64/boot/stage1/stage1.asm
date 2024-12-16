@@ -1,5 +1,6 @@
 ;
 ; mdrOS bootloader stage 1 code
+; Copyright 2024 Théo Jehl
 ;
 
 ; mdrOS uses a custom bootloader because why not ? This is stage one, located in the MBR

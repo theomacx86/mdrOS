@@ -1,3 +1,8 @@
+/*
+mdrOS second stage bootloader serial source file
+Copyright 2024 Théo Jehl
+*/
+
 #include <stdint.h>
 #include "serial.h"
 

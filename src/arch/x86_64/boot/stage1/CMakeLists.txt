@@ -1,5 +1,6 @@
 #
 #   mdrOS first stage bootloader CMakeLists.txt
+#   Copyright 2024 Théo Jehl
 #
 
 cmake_minimum_required(VERSION 3.14)
