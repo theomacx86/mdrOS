@@ -1,7 +1,11 @@
+/*
+mdrOS second stage bootloader disk driver source file
+Copyright 2024 Théo Jehl
+*/
+
 #include "disk.h"
 #include <stdint.h>
 #include "serial.h"
-
 
 void ata_read_bytes(uint32_t start, uint32_t n, char * buffer)
 {

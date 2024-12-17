@@ -7,6 +7,15 @@ Copyright 2024 Théo Jehl
 #define EXT2_h
 
 #include <stdint.h>
+#include "disk.h"
+
+/*
+    Convert a EXT2 block address to a physical byte on disk
+    @param START_BLOCK : starting block on disk (sector)
+    @param BLOCK_SIZE : block size (from EXT2 superblock)
+    @param BLOCK : target block
+*/
+#define BLOCK_TO_BYTE(START_BLOCK, BLOCK_SIZE, BLOCK) ((START_BLOCK*SECTOR_SIZE) + (BLOCK_SIZE*BLOCK))
 
 #define EXT2_SIGNATURE 0xEF53
 

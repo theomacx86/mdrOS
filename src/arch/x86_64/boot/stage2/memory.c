@@ -22,7 +22,7 @@ void reserve_mmio_range(uint64_t base, uint64_t size)
     entry.type = E820_MEMORY_RESERVED;
     entry.ACPI_attributes = 0;
 
-    serial_printf("Registering reserved %x -> %x range.\n", entry.base, entry.base + entry.len);
+    serial_printf("[MEM] Registering reserved %x -> %x range.\n", entry.base, entry.base + entry.len);
 
     //Looking for collision with free ranges.
     for(int i = 0; i < memory_map.map_size; ++i)
@@ -31,19 +31,22 @@ void reserve_mmio_range(uint64_t base, uint64_t size)
         {
             if(entry.base < memory_map.map[i].base + memory_map.map[i].len && memory_map.map[i].base < entry.base + entry.len)
             {
-                serial_printf("Collision between reserved %x -> %x with free %x -> %x\n", 
+                serial_printf("[MEM] Collision between reserved %x -> %x with free %x -> %x\n", 
                     entry.base, entry.base + entry.len, memory_map.map[i].base, memory_map.map[i].base + memory_map.map[i].len);
                 
                 if(memory_map.map[i].base >= entry.base && memory_map.map[i].base + memory_map.map[i].len <= entry.base + entry.len)
                 {
-                    serial_write_str("Deleting free range\n");
+                    //TODO instead of marking the range as free, maybe yank it out of the list.
+                    serial_write_str("[MEM] Deleting free range\n");
                     memory_map.map[i].type = E820_MEMORY_RESERVED;
                 }
                 else
                 {
-                    serial_write_str("Truncate free range.\n");
+                    serial_write_str("[MEM] Truncate free range.\n");
                     //If the beginning of the memory zone is within the memory range, beginning = end of reserved range.
                     //The previous condition already handled a memory range that fits within the reserved range.
+
+                    //TODO: Add that to the test list to ensure it's the actual behavior we want
                     if(memory_map.map[i].base >= entry.base && memory_map.map[i].base <= entry.base +entry.len)
                     {
                         memory_map.map[i].base = entry.base + entry.len;
@@ -56,7 +59,7 @@ void reserve_mmio_range(uint64_t base, uint64_t size)
                         memory_map.map[i].len = entry.base - memory_map.map[i].base;
                     }
 
-                    serial_printf("New free range values %x -> %x\n", 
+                    serial_printf("[MEM] New free range values %x -> %x\n", 
                     memory_map.map[i].base, memory_map.map[i].base + memory_map.map[i].len);
                 }
             }
@@ -106,8 +109,6 @@ void init_memory_map(E820_map_s * bios_map)
 
     return;
 
-    //TODO
+    //TODO sort and clean the memory map from conflicting aread
     //QEMU gives us a clean memory map, how cool.
-    
-    
 }

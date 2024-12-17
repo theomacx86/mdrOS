@@ -28,12 +28,13 @@ void bootloader_start(E820_map_s * memory_map)
         serial_printf("[INFO] Memory entry type %x base %x to %x\n", (uint64_t) (memory_map->map[i].type),  memory_map->map[i].base,  memory_map->map[i].base + memory_map->map[i].len);
     }
 
+    //Init memory map
+    //Reserves the 0->3Mb range, as we have out bootloader loaded there with some important data.
     init_memory_map(memory_map);
+    reserve_mmio_range(0x0, 0x300000);
 
     ext2_init();
     
-    //Test: reserve the first 2 megs
-    reserve_mmio_range(0x0, 0x200000);
     print_memory_map();
 
     deadloop();
