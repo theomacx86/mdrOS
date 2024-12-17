@@ -47,4 +47,19 @@ typedef struct ext2_superblock
     char filler[428];
 } __attribute__((packed)) ext2_superblock_s;
 
+typedef struct ext2_block_group_descriptor
+{
+    uint32_t block_usage_bitmap;
+    uint32_t inode_usage_bitmap;
+    uint32_t inode_table_address;
+    uint16_t unallocated_block_count;
+    uint16_t unallocated_inodes_group;
+    uint16_t directories_count;
+} __attribute__((packed)) ext2_block_group_descriptor_s;
+
+void ext2_init();
+
+uint32_t ext2_get_block_size();
+
+
 #endif

@@ -16,9 +16,11 @@ void ata_read_bytes(uint32_t start, uint32_t n, char * buffer)
     uint32_t bytes_in_this_block = 0;                       //Bytes in the current block, used when reads are not aligned
     uint32_t destination_offset = 0;                        //Current position in the target buffer;
 
+    serial_printf("[ATA] Start read from %x\n", start);
+
     while(bytes_to_read != 0)
     {
-        serial_printf("%d Bytes to read", bytes_to_read);
+        serial_printf("[ATA] %d Bytes to read\n", bytes_to_read);
         ata_lba_read(start_block, 1, (uint16_t * ) internal_buffer);
         bytes_in_this_block = SECTOR_SIZE - offset_in_first_block;
 
@@ -77,8 +79,6 @@ void ata_lba_read(uint32_t LBA, uint8_t count, uint16_t * buffer)
     outb(LBA_PORT_16_23, (uint8_t) (LBA >> 16));
 
     outb(LBA_COMMAND_PORT, 0x20);
-
-    serial_write_str("Reading...\n");
 
     while(!(inb(LBA_COMMAND_PORT) & 0x8));
 
